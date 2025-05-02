@@ -1,3 +1,6 @@
+# We check that the position-momentum, and the velocity-stress implementations match, in 
+# dimension one and two
+
 import sys
 sys.path.insert(0,"/Users/jean-mariemirebeau/Dropbox/Programmes/GithubM1/AGDT/AdaptiveGridDiscretizations_Taichi")
 sys.path.insert(0,"/Users/jean-mariemirebeau/Dropbox/Programmes/GithubM1/AdaptiveGridDiscretizations")
@@ -8,30 +11,30 @@ float_t = ti.f64
 ti.init(arch=ti.cpu,default_fp=float_t,debug=True)
 np.set_printoptions(linewidth=2000)
 
-from agdt import Selling
-from agdt import Misc
-from agdt.Waves.AnisoScalar import AnisoScalar
-np_float_t = Misc.convert_dtype['np'][float_t]
+import agdt
+#from agdt import Selling
+from agdt.Waves.AnisoScalar import AnisoScalar,BoxNormal
+np_float_t = agdt.convert_dtype['np'][float_t]
 
 #from agd.Metrics.misc import expand_symmetric_matrix
 #from matplotlib import pyplot as plt
 
-dt=1
+dt=1; dx=1
 shape = (5,5)
 
 E = np.eye(2).astype(int)
 decompdim = E.shape[1]
 
 np.random.seed(42)
-μ = 1+np.random.rand(*shape)
-λ = 1+np.random.rand(*shape,decompdim)
+μ = 1+np.random.rand(*shape) # Inverse density
+λ = 1+np.random.rand(*shape,decompdim) # Decomposition coefficients
 #μ = np.ones(shape,dtype=np_float_t)
 #λ = np.ones((*shape,decompdim),dtype=np_float_t) # Isotropic Laplacian
-wave = AnisoScalar(μ,λ,E,dt)
+wave = AnisoScalar(μ,λ,E,dx,dt)
 
-print(wave.eAσ)
+print("Γσ\n",wave.Γσ)
 
-assert np.allclose(wave.eAv.to_numpy(),1)
+assert np.allclose(wave.Γv.to_numpy(),1)
 
 q = ti.field(float_t,wave.size); q.from_numpy(np.random.rand(*q.shape)-0.5)
 p = ti.field(float_t,wave.size); p.from_numpy(np.random.rand(*p.shape)-0.5)
@@ -55,7 +58,6 @@ wave.Verlet_v(σ1,v1)
 assert np.allclose(Hp,wave.Hσv(σ1,v1))
 assert np.allclose(σ1.to_numpy(),wave.q2σ(q1).to_numpy())
 assert np.allclose(v1.to_numpy(),wave.p2v(p1).to_numpy())
-
 
 
 

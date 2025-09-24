@@ -1,0 +1,11 @@
+Algorithms : 
+https://drive.google.com/file/d/1g6Vcs8nuGWM0o7RqO7Ot3SrT8lNJYaed/view?usp=sharing
+Solution : https://drive.google.com/file/d/1IY5bYdnxBkNvvNVX_MwUb-2ag2aze_h6/view?usp=sharing
+
+Approximation of the Reeds-Shepp subRiemannian model : 
+https://drive.google.com/file/d/1_dBBglGbMHnCYIV8BJAo_25DiJf2LRa7/view?usp=sharing
+Solution : https://drive.google.com/open?id=1bquk-ZMLflRTteALjtp_wk2C9udL8BrL&usp=drive_fs
+
+Tubular structure segmentation : 
+https://drive.google.com/file/d/1EFpu7-Ttenoq0dMzMbl5j0rVGuoeqEdx/view?usp=sharing
+Solution : https://drive.google.com/file/d/1EFpu7-Ttenoq0dMzMbl5j0rVGuoeqEdx/view?usp=sharing

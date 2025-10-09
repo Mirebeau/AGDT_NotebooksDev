@@ -185,6 +185,28 @@ if True:
 
 exit(0)
 
+# ----------- Resizing a class member (FAILS) ---------
+# Not sure how to do best. We need to pass as argument.
+
+class myclass:
+    def __init__(self):
+        self.lifo = Queue.lifo.init(ti.i32,6)
+    @ti.pyfunc
+    def push(self,x): 
+        self.lifo.push(self.lifo,x)
+        print(self.lifo.capacity(self.lifo))
+
+myinstance = myclass()
+myinstance.push(2)
+myinstance.lifo = Queue.lifo.init(ti.i32,12)
+myinstance.push(3)
+
+@ti.kernel
+def mytest():
+    myinstance.push(4)
+mytest()
+
+exit(0)
 
 float_t = ti.f32; int_t = ti.i32
 ti.init(arch=ti.cpu,default_fp=float_t,default_ip=int_t, debug=True)

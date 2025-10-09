@@ -46,12 +46,12 @@ if True: # Build metric using autodiff
             p = dom.PointFromIndex(index)
             riemann[index] = topographic_metric(p[0],p[1])
     set_metric()
-if False: # Build metric using finite differences
+elif False: # Build metric using finite differences
     Z = elevation.orig(*dom.grid())
     DxZ,DyZ = np.gradient(Z,dom.h[0],axis=(0,1))
     m = [[1+DxZ**2,DxZ*DyZ],[DxZ*DyZ,1+DyZ**2]]
     riemann.from_numpy( np.moveaxis(m,(0,1),(-2,-1)) )
-if False: # Constant metric
+else: # Constant metric
     riemann = agdt.GetArrayModule.tofield([[1,0],[0,1]],ti.math.mat2)
 
 tips = HFM.Domain(bounds,(6,6),metricType).grid()
@@ -62,7 +62,8 @@ if True:
     dom.set_seed((0,0))
     dom.Algo.solve_FMM()
 
-
+    print(dom.values(True))
+    #exit(0)
     # Note : Some geodesics near the center do not look good (oscillate), but that is expected, since
     # they start close to the cut locus
     ode = dom.ode()
@@ -111,9 +112,12 @@ plt.colorbar()
 plt.show()
 
 #assert np.allclose(hfmOut['values'],dom.values(True),atol=1e-4)
+nbad = np.sum(abs(hfmOut['values']-dom.values(True))>=1e-4)
+print(f"Differneces in value function : {nbad=}")
 flow_agd = hfmOut['flow']
 flow_agdt = np.moveaxis(dom.flows()[0].to_numpy(),-1,0) #np.moveaxis(ode.flows.to_numpy(),-1,0)
-
+nbad = np.sum(np.abs(flow_agd+flow_agdt)>=1e-4)
+print(f"Differences in flow {nbad=}")
 # Les flow diffèrent seulement en qq points, sur la diagonale. Pas forcément grave, 
 # cela correspond au cut-locus.
 #print(flow_agd+flow_agdt)
